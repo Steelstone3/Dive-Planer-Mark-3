@@ -11,14 +11,17 @@ namespace DivePlannerMk3.ViewModels.DiveHeader
         public FileViewModel(MainWindowViewModel mainWindowViewModel)
         {
             _mainWindowViewModel = mainWindowViewModel;
-            NewCommand = ReactiveCommand.Create(CreateNewDiveSession);
+            _newDive = new NewDiveViewModel(_mainWindowViewModel, new NewApplicationStateController());
+
             SaveCommand = ReactiveCommand.Create(SaveDivePlannerState);
             OpenCommand = ReactiveCommand.Create(LoadDivePlannerState);
         }
 
-        public ReactiveCommand<Unit, Unit> NewCommand
+        private NewDiveViewModel _newDive;
+        public NewDiveViewModel NewDive
         {
-            get;
+            get => _newDive;
+            set => this.RaiseAndSetIfChanged(ref _newDive, value);
         }
 
         public ReactiveCommand<Unit, Unit> SaveCommand
@@ -29,12 +32,6 @@ namespace DivePlannerMk3.ViewModels.DiveHeader
         public ReactiveCommand<Unit, Unit> OpenCommand
         {
             get;
-        }
-
-        private void CreateNewDiveSession()
-        {
-            var newApplicationState = new NewApplicationStateController();
-            _mainWindowViewModel = newApplicationState.NewApplication(_mainWindowViewModel);
         }
 
         //TODO AH this area needs a changable save name investigate Directory property of the SaveDialog

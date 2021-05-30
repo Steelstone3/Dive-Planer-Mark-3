@@ -1,4 +1,5 @@
 using DivePlannerMk3.Contracts;
+using DivePlannerMk3.Controllers;
 using DivePlannerMk3.ViewModels;
 using DivePlannerMk3.ViewModels.DiveApplication;
 using DivePlannerMk3.ViewModels.DiveHeader;
@@ -15,49 +16,21 @@ namespace DivePlannerTests
         [Fact]
         public void ResetAllDiveApplicationModels()
         {
-            var mainWindowViewModelOriginal = new MainWindowViewModel()
-            {
-                DiveHeader = new DiveHeaderViewModel(),
-                DiveApplication = new DiveApplicationViewModel(new Mock<IDiveProfileService>().Object)
-                {
-                    DivePlanSetup = new DivePlanSetupViewModel(new Mock<IDiveProfileService>().Object)
-                    {
-                        DiveStep = new DiveStepViewModel()
-                        {
-                            Depth = 50,
-                            Time = 10,
-                        },
-                    },
-                    DiveInformation = new DiveInformationViewModel()
-                    {
-                    
-                    },
-                    DiveResults = new DiveResultsViewModel()
-                    {
-                        DiveParametersResult = new DiveParametersResultViewModel()
-                        {
-                            Depth = 50,
-                            Time = 10,
-                            DiveModelUsed = "Bob",
-                            DiveProfileStepHeader = "Dive Step",
-                        }
-                    },
-                },
+            var mainWindowViewModel = new MainWindowViewModel();
+            mainWindowViewModel.DiveApplication = null;
+            mainWindowViewModel.DiveHeader = null;
 
-            };
+            Assert.Null(mainWindowViewModel.DiveApplication);
+            Assert.Null(mainWindowViewModel.DiveHeader);
 
             var newApplicationState = new NewApplicationStateController();
-            var mainWindowViewModel = newApplicationState.NewApplication(mainWindowViewModelOriginal);
+            mainWindowViewModel = newApplicationState.NewApplication(mainWindowViewModel);
 
-            Assert.Equal(mainWindowViewModelOriginal.DiveHeader, mainWindowViewModel.DiveHeader);
-
-            Assert.NotEqual(50, mainWindowViewModelOriginal.DiveApplication.DivePlanSetup.DiveStep.Depth);
-            Assert.NotEqual(10, mainWindowViewModelOriginal.DiveApplication.DivePlanSetup.DiveStep.Time);
-
-            Assert.NotEqual(50, mainWindowViewModelOriginal.DiveApplication.DiveResults.DiveParametersResult.Depth);
-            Assert.NotEqual(10, mainWindowViewModelOriginal.DiveApplication.DiveResults.DiveParametersResult.Time);
-            Assert.NotEqual("Bob", mainWindowViewModelOriginal.DiveApplication.DiveResults.DiveParametersResult.DiveModelUsed);
-            Assert.NotEqual("Dive Step", mainWindowViewModelOriginal.DiveApplication.DiveResults.DiveParametersResult.DiveProfileStepHeader);
+            Assert.NotNull(mainWindowViewModel.DiveApplication);
+            Assert.NotNull(mainWindowViewModel.DiveApplication.DiveInformation);
+            Assert.NotNull(mainWindowViewModel.DiveApplication.DivePlanSetup);
+            Assert.NotNull(mainWindowViewModel.DiveApplication.DiveResults);
+            Assert.Null(mainWindowViewModel.DiveHeader);
         }
     }
 }

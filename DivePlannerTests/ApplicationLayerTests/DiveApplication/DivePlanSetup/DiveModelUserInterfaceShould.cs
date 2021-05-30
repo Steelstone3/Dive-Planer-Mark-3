@@ -98,7 +98,7 @@ namespace DivePlannerTests
             //_diveModelSelectorViewModel.IsUiVisible = false;
 
             //Act
-            _mainWindowViewModel.DiveHeader.File.NewCommand.Execute();
+            _mainWindowViewModel.DiveHeader.File.NewDive.NewCommand.Execute();
 
             //Assert
             Assert.True(_diveModelSelectorViewModel.IsUiEnabled);
